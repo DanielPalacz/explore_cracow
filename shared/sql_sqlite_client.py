@@ -9,6 +9,9 @@ Attributes:
 import sqlite3
 from typing import Optional, TypeVar
 
+from shared.funcs import get_database_location
+from static.constants import SQL_QUERY
+
 SqliteConn = TypeVar("SqliteConn", bound="sqlite3.Connection")
 
 
@@ -47,8 +50,8 @@ class SqliteClient:
     def insert(self, **kwargs) -> None:
         pass
 
-    def select(self, **kwargs) -> None:
-        pass
+    def select(self, sql_query) -> list[tuple]:
+        return self.__connection.execute(sql_query).fetchall()
 
     def __setup_connection(self) -> None:
         connection = sqlite3.connect(
@@ -60,3 +63,12 @@ class SqliteClient:
 
     def __close_connection(self, **kwargs) -> None:
         self.__connection.close()
+
+
+if __name__ == "__main__":
+    location = get_database_location()
+    print(location)
+    with SqliteClient(location) as sqlite_client:
+        records = sqlite_client.select(SQL_QUERY)
+        for row in records:
+            print(row)
