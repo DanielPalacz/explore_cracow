@@ -57,7 +57,57 @@ class TripGenerator:
         self.__monuments = random_monuments
 
 
+class MonumentItem:
+
+    def __init__(
+            self, name: str, chronology: str, city: str, street: str, street_number: str, width_coordinate, longitude):
+        self.__name: str = name
+        self.__chronology: str = chronology
+        self.__city: str = city
+        self.__street_address: str = street + " " + street_number
+        self.__width_coordinate: float = float(width_coordinate)
+        self.__longitude: float = float(longitude)
+
+    def __le__(self, other):
+        geogr_location = self.__width_coordinate * self.__width_coordinate + self.__longitude * self.__longitude
+        other_geogr_location = (
+                other.__width_coordinate * other.__width_coordinate + other.__longitude * other.__longitude)
+        return geogr_location <= other_geogr_location
+
+    def __lt__(self, other):
+        geogr_location = self.__width_coordinate * self.__width_coordinate + self.__longitude * self.__longitude
+        other_geogr_location = (
+                other.__width_coordinate * other.__width_coordinate + other.__longitude * other.__longitude)
+        return geogr_location < other_geogr_location
+
+    def __ge__(self, other):
+        geogr_location = self.__width_coordinate * self.__width_coordinate + self.__longitude * self.__longitude
+        other_geogr_location = (
+                other.__width_coordinate * other.__width_coordinate + other.__longitude * other.__longitude)
+        return geogr_location > other_geogr_location
+
+    def __gt__(self, other):
+        geogr_location = self.__width_coordinate * self.__width_coordinate + self.__longitude * self.__longitude
+        other_geogr_location = (
+                other.__width_coordinate * other.__width_coordinate + other.__longitude * other.__longitude)
+        return geogr_location > other_geogr_location
+
+
 if __name__ == "__main__":
+    random_monuments = []
+
+    for random_monument in pick_n_random_monuments(5):
+        monuments_item = MonumentItem(
+            name=random_monument[1],
+            chronology=random_monument[2],
+            city=random_monument[3],
+            street=random_monument[4],
+            street_number=random_monument[5],
+            width_coordinate=random_monument[6],
+            longitude=random_monument[7]
+        )
+        random_monuments.append(monuments_item)
+
     breakpoint()
     # location = get_database_location()
     # print(location)
