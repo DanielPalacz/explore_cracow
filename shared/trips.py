@@ -97,7 +97,11 @@ class MonumentItem:
         self.__name: str = name
         self.__chronology: str = chronology
         self.__city: str = city
-        self.__street_address: str = street + " " + street_number
+
+        street_ = street or "-"
+        street_number_ = street_number or "-"
+        self.__street_address: str = street_ + " " + street_number_
+
         self.__width_coordinate: float = float(width_coordinate)
         self.__longitude: float = float(longitude)
 

@@ -22,3 +22,5 @@ DEF_SQLITE_SCHEMA = """CREATE TABLE IF NOT EXISTS zabytki (
 
 SQL_QUERY = \
     "select id, nazwa, chronologia, miejscowosc, ulica, nr_adresowy, szerokosc_geogr, dlugosc_geogr from zabytki;"
+
+NUM_OF_MONUMENTS = 1489
