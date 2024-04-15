@@ -1,3 +1,7 @@
+from typing import TypeVar
+
+import click
+
 from shared.funcs import get_database_location
 from shared.sql_sqlite_client import SqliteClient
 from static.constants import SQL_QUERY
@@ -6,6 +10,8 @@ from random import randint
 
 DB_LOCATION = get_database_location()
 """ Provides absolute value of the database directory. """
+
+MonumentItemT = TypeVar("MonumentItemT", bound="MonumentItem")
 
 
 def get_monuments() -> list[tuple]:
@@ -53,8 +59,35 @@ def pick_n_random_monuments(n: int) -> list[tuple]:
 
 class TripGenerator:
 
-    def __init__(self, random_monuments):
-        self.__monuments = random_monuments
+    def __init__(self, n: int):
+        self.__monuments = pick_n_random_monuments(n)
+
+    def run(self) -> None:
+        sorted_monuments = sorted(self.__prepare_trip_monuments())
+        print("Start here:")
+        print(" -", sorted_monuments[0])
+        for monument in sorted_monuments[1:]:
+            print("Later, go there:")
+            print(" -", monument)
+        else:
+            print()
+            print("Your trip just has finished.")
+
+    def __prepare_trip_monuments(self) -> list[MonumentItemT]:
+        monuments = []
+
+        for random_monument in self.__monuments:
+            monument_item = MonumentItem(
+                name=random_monument[1],
+                chronology=random_monument[2],
+                city=random_monument[3],
+                street=random_monument[4],
+                street_number=random_monument[5],
+                width_coordinate=random_monument[6],
+                longitude=random_monument[7]
+            )
+            monuments.append(monument_item)
+        return monuments
 
 
 class MonumentItem:
@@ -67,6 +100,9 @@ class MonumentItem:
         self.__street_address: str = street + " " + street_number
         self.__width_coordinate: float = float(width_coordinate)
         self.__longitude: float = float(longitude)
+
+    def __str__(self):
+        return f"{self.name}, [{self.__chronology}, {self.__city}, {self.__street_address}]"
 
     def __le__(self, other):
         geogr_location = self.__width_coordinate * self.__width_coordinate + self.__longitude * self.__longitude
@@ -92,27 +128,7 @@ class MonumentItem:
                 other.__width_coordinate * other.__width_coordinate + other.__longitude * other.__longitude)
         return geogr_location > other_geogr_location
 
-
-if __name__ == "__main__":
-    random_monuments = []
-
-    for random_monument in pick_n_random_monuments(5):
-        monuments_item = MonumentItem(
-            name=random_monument[1],
-            chronology=random_monument[2],
-            city=random_monument[3],
-            street=random_monument[4],
-            street_number=random_monument[5],
-            width_coordinate=random_monument[6],
-            longitude=random_monument[7]
-        )
-        random_monuments.append(monuments_item)
-
-    breakpoint()
-    # location = get_database_location()
-    # print(location)
-    # with SqliteClient(location) as sqlite_client:
-    #    records = sqlite_client.select(SQL_QUERY)
-    #    breakpoint()
-    #    for row in records:
-    #        print(row)
+    @property
+    def name(self) -> str:
+        """ Provides monument name. """
+        return self.__name
