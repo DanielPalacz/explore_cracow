@@ -29,7 +29,7 @@ def get_monuments() -> list[tuple]:
 
 
 def get_one_random_monument(monuments: list[tuple]) -> tuple:
-    """ Provides one random monument from the list of monuments
+    """ Provides one random monument from the list of monuments.
 
     Returns:
         example:
@@ -58,11 +58,28 @@ def pick_n_random_monuments(n: int) -> list[tuple]:
 
 
 class TripGenerator:
+    """ Represent trip generating.
+
+    Args:
+        n (int): number of monuments to pick up.
+
+    Attributes:
+        __monuments (list[tuple]): list of tuples containing monuments
+    """
 
     def __init__(self, n: int):
         self.__monuments = pick_n_random_monuments(n)
 
     def run(self) -> None:
+        """ Runs trip generation.
+
+        Example:
+            trip_generator = TripGenerator(10)
+            trip_generator.run()
+
+        Returns:
+            None
+        """
         sorted_monuments = sorted(self.__prepare_trip_monuments())
         print("Start here:")
         print(" -", sorted_monuments[0])
@@ -91,6 +108,12 @@ class TripGenerator:
 
 
 class MonumentItem:
+    """ Represents single monument item.
+
+    Class introduces specific implementation of magic methods:
+     - __le__, __lt__, __ge__, __gt__
+     Because of this it is possible to sort monuments based of geographic coordinates.
+    """
 
     def __init__(
             self, name: str, chronology: str, city: str, street: str, street_number: str, width_coordinate, longitude):
