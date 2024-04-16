@@ -66,9 +66,9 @@ class SqliteClient:
 
 
 if __name__ == "__main__":
-    location = get_database_location()
-    print(location)
-    with SqliteClient(location) as sqlite_client:
+    db_location = get_database_location()
+    print(db_location)
+    with SqliteClient(db_location) as sqlite_client:
         records = sqlite_client.select(SQL_QUERY)
         for row in records:
             print(row)
